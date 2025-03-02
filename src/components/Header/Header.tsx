@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 
 const Header = () => {
+   const [active, setActive] = useState(false);
    const navigate = useNavigate();
+
+   const handlerToggleSearch = () => setActive(!active);
 
    return (
       <header className='container'>
@@ -59,6 +63,7 @@ const Header = () => {
                            <div
                               data-id='search-expander'
                               className='header-controls-pic header-controls-search'
+                              onClick={handlerToggleSearch}
                            ></div>
                            <div
                               className='header-controls-pic header-controls-cart'
@@ -71,7 +76,9 @@ const Header = () => {
                         </div>
                         <form
                            data-id='search-form'
-                           className='header-controls-search-form form-inline invisible'
+                           className={`header-controls-search-form form-inline ${
+                              active ? 'visible' : 'invisible'
+                           }`}
                         >
                            <input className='form-control' placeholder='Поиск' />
                         </form>

@@ -9,10 +9,14 @@ a {
    color: #727e86;
 }
 
-a,
+/* a,
 a:hover,
 a:visited,
 a:active {
+   text-decoration: none;
+} */
+
+:is(a, a:hover, a:visited, a:active) {
    text-decoration: none;
 }
 
@@ -43,7 +47,7 @@ section {
    height: 32px;
    width: 32px;
    margin: 0 10px;
-   background-image: url(./public/header-controls-sprite.png);
+   background-image: url(../public/header-controls-sprite.png);
    background-repeat: no-repeat;
    cursor: pointer;
 }
