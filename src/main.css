@@ -193,6 +193,9 @@ section {
 
 .catalog-item-size {
    display: inline-block;
+   cursor: pointer;
+   font-size: 24px;
+   margin-left: 5px;
    padding: 0 10px;
 }
 
@@ -238,7 +241,7 @@ section {
    border-radius: 8px;
    background-color: #ffffff;
    background-repeat: no-repeat;
-   background-image: url(./public/footer-sprite.png);
+   background-image: url(/public/footer-sprite.png);
 }
 .footer-pay-systems:not(:first-child) {
    margin-left: 5px;

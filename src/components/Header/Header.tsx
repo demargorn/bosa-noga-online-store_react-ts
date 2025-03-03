@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
+import { TypeRootState } from '../../store/store';
 
 const Header = () => {
    const [active, setActive] = useState(false);
+   const cart = useSelector((s: TypeRootState) => s.cart.items); // корзина товаров
    const navigate = useNavigate();
 
    const handlerToggleSearch = () => setActive(!active);
@@ -13,7 +16,7 @@ const Header = () => {
             <div className='col'>
                <nav className='navbar navbar-expand-sm navbar-light bg-light'>
                   <NavLink to='/' className='navbar-brand'>
-                     <img src='./public/header-logo.png' alt='bosa-noga-logo' />
+                     <img src='/public/header-logo.png' alt='bosa-noga-logo' />
                   </NavLink>
                   <div className='collapse navbar-collapse' id='navbarMain'>
                      <ul className='navbar-nav mr-auto'>
@@ -62,6 +65,7 @@ const Header = () => {
                         <div className='header-controls-pics'>
                            <div
                               data-id='search-expander'
+                              title='поиск'
                               className='header-controls-pic header-controls-search'
                               onClick={handlerToggleSearch}
                            ></div>
@@ -70,7 +74,7 @@ const Header = () => {
                               title='корзина'
                               onClick={() => navigate('/cart')}
                            >
-                              <div className='header-controls-cart-full'>1</div>
+                              <div className='header-controls-cart-full'>{cart.length}</div>
                               <div className='header-controls-cart-menu'></div>
                            </div>
                         </div>

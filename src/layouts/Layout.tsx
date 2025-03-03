@@ -10,7 +10,7 @@ const Layout = () => {
             <div className='row'>
                <div className='col'>
                   <div className='banner'>
-                     <img src='./public/banner.jpg' className='img-fluid' alt='к весне готовы!' />
+                     <img src='/public/banner.jpg' className='img-fluid' alt='к весне готовы!' />
                      <h2 className='banner-header'>К весне готовы!</h2>
                   </div>
                   <Outlet />

@@ -12,7 +12,7 @@ const Item = (props: IItem) => {
             <div className='card-body'>
                <p className='card-text'>{props.title}</p>
                <p className='card-text'>{props.price} руб.</p>
-               <Button onClick={() => navigate('/catalog')}>Заказать</Button>
+               <Button onClick={() => navigate(`/catalog/${props.id}`)}>Заказать</Button>
             </div>
          </div>
       </div>

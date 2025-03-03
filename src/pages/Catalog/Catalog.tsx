@@ -4,14 +4,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { API } from '../../helpers/API';
 import { TypeDispatch, TypeRootState } from '../../store/store';
-import { getItems } from '../../slices/cart.slice';
+import { getItems } from '../../slices/products.slice';
 import { IItem } from '../../interfaces/Item.interface';
 import Preloader from '../../components/Preloader/Preloader';
 import Item from '../../components/Item/Item';
+import Button from '../../components/Button/Button';
 
 const Catalog = () => {
-   const items = useSelector((s: TypeRootState) => s.cart.items);
+   const items = useSelector((s: TypeRootState) => s.products.items); // элементы каталога
    const dispatch = useDispatch<TypeDispatch>();
+   // загружаем еще
+   const handleGetMoreProducts = async () => {
+      try {
+         const { data } = await axios.get<IItem>(`${API}/items?offset=6`);
+         console.log(data);
+         dispatch(getItems(data));
+      } catch (e) {
+         console.log(e);
+      }
+   };
 
    useEffect(() => {
       (async () => {
@@ -81,7 +92,7 @@ const Catalog = () => {
                   ))}
                </div>
                <div className='text-center'>
-                  <button className='btn btn-outline-primary'>Загрузить ещё</button>
+                  <Button onClick={handleGetMoreProducts}>Загрузить ещё</Button>
                </div>
             </>
          )}

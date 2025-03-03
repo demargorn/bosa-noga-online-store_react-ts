@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { TypeDispatch, TypeRootState } from '../../store/store';
-import { getHits } from '../../slices/cart.slice';
+import { getHits } from '../../slices/products.slice';
 import { API } from '../../helpers/API';
 import { IItem } from '../../interfaces/Item.interface';
 import Preloader from '../Preloader/Preloader';
 import Item from '../Item/Item';
 
 const Hits = () => {
-   const hits = useSelector((s: TypeRootState) => s.cart.hits); // список хитов продаж
+   const hits = useSelector((s: TypeRootState) => s.products.hits); // элементы хитов
    const dispatch = useDispatch<TypeDispatch>();
 
    useEffect(() => {
