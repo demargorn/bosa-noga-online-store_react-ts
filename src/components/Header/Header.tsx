@@ -74,7 +74,9 @@ const Header = () => {
                               title='корзина'
                               onClick={() => navigate('/cart')}
                            >
-                              <div className='header-controls-cart-full'>{cart.length}</div>
+                              {cart.length > 0 && (
+                                 <div className='header-controls-cart-full'>{cart.length}</div>
+                              )}
                               <div className='header-controls-cart-menu'></div>
                            </div>
                         </div>
