@@ -29,7 +29,6 @@ const cartSlice = createSlice({
             return i;
          });
       },
-
       // уменьшаем количество продукта в корзине
       remove: (state, { payload }: PayloadAction<IItem>) => {
          const existed = state.items.find((i) => i.id === payload.id);
@@ -43,11 +42,14 @@ const cartSlice = createSlice({
             }
             return i;
          });
-         return;
       },
       // удаляем продукт из корзины
       deleteItem: (state, { payload }: PayloadAction<IItem>) => {
          state.items = state.items.filter((i) => i.id !== payload.id);
+      },
+      // очищаем корзину
+      clean: (state) => {
+         state.items = [];
       },
    },
 });

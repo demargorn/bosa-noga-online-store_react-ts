@@ -14,7 +14,7 @@ const Card = () => {
    const item = useSelector((s: TypeRootState) => s.cart.items[0]); // продукт
    const [checked, setChecked] = useState<boolean>(false); // выбран ли размер
    const dispatch = useDispatch<TypeDispatch>();
-   const navigate = useNavigate()
+   const navigate = useNavigate();
 
    // увеличить количество
    const handlePlusCount = () => {
@@ -107,7 +107,11 @@ const Card = () => {
                </div>
                {/* если нет доступных размеров */}
                {item.sizes && (
-                  <button className='btn btn-danger btn-block btn-lg' disabled={!checked} onClick={() => navigate('/cart')}>
+                  <button
+                     className='btn btn-danger btn-block btn-lg'
+                     disabled={!checked}
+                     onClick={() => navigate('/cart')}
+                  >
                      В корзину
                   </button>
                )}

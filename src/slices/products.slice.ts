@@ -18,12 +18,13 @@ const productsSlice = createSlice({
       getItems: (state, { payload }: PayloadAction<IItem>) => {
          const existed = state.items.find((i) => i.id === payload.id); // ищем совпадения по id
          // запрещаем добавление одинаковых элементов
-         if (existed) {
-            return;
-         }
+         // if (existed) {
+         //    return;
+         // }
+
          state.items.push(payload);
       },
-      
+
       //загружаем список хитов
       getHits: (state, { payload }: PayloadAction<IItem>) => {
          const existed = state.hits.find((i) => i.id === payload.id); // ищем совпадения по id
@@ -33,8 +34,11 @@ const productsSlice = createSlice({
          }
          state.hits.push(payload);
       },
+      clear: (state) => {
+         state.items = [];
+      },
    },
 });
 
-export const { getItems, getHits } = productsSlice.actions;
+export const { getItems, getHits, clear } = productsSlice.actions;
 export default productsSlice.reducer;

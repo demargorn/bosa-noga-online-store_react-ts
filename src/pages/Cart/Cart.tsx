@@ -1,8 +1,7 @@
+import { Link } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { TypeDispatch, TypeRootState } from '../../store/store';
 import { deleteItem } from '../../slices/cart.slice';
-import { IItem } from '../../interfaces/Item.interface';
-import { Link } from 'react-router';
 
 const Cart = () => {
    const cart = useSelector((s: TypeRootState) => s.cart.items); // корзина
@@ -25,32 +24,36 @@ const Cart = () => {
                   </tr>
                </thead>
                {cart.map((c) => (
-                  <tbody>
-                     <tr>
-                        <td scope='row'>1</td>
-                        <td>
-                           <Link to={`/catalog/${c.id}`}>{c.title}</Link>
-                        </td>
-                        <td>10 US</td>
-                        <td>{c.count}</td>
-                        <td>{c.price}</td>
-                        <td>{c.price * c.count!} руб.</td>
-                        <td>
-                           <button
-                              className='btn btn-outline-danger btn-sm'
-                              onClick={() => dispatch(deleteItem(c))}
-                           >
-                              Удалить
-                           </button>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td colSpan={5} className='text-right'>
-                           Общая стоимость
-                        </td>
-                        <td>{c.price * c.count!} руб.</td>
-                     </tr>
-                  </tbody>
+                  <>
+                     <tbody>
+                        <tr>
+                           <td scope='row'>{cart.length}</td>
+                           <td>
+                              <Link to={`/catalog/${c.id}`}>{c.title}</Link>
+                           </td>
+                           <td>10 US</td>
+                           <td>{c.count}</td>
+                           <td>{c.price}</td>
+                           <td>{c.price * c.count!} руб.</td>
+                           <td>
+                              <button
+                                 className='btn btn-outline-danger btn-sm'
+                                 onClick={() => dispatch(deleteItem(c))}
+                              >
+                                 Удалить
+                              </button>
+                           </td>
+                        </tr>
+                     </tbody>
+                     <tfoot>
+                        <tr>
+                           <td colSpan={5} className='text-right'>
+                              Общая стоимость
+                           </td>
+                           <td>{c.price * c.count!} руб.</td>
+                        </tr>
+                     </tfoot>
+                  </>
                ))}
             </table>
          </section>
