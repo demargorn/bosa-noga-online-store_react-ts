@@ -38,7 +38,7 @@ const Card = () => {
       })();
    }, []);
 
-   console.log(item);
+   // console.log(item);
 
    return item ? (
       <section className='catalog-item'>

@@ -1,14 +1,43 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, FormEvent, ChangeEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
-import { TypeRootState } from '../../store/store';
+import axios from 'axios';
+import { TypeDispatch, TypeRootState } from '../../store/store';
+import { API } from '../../helpers/API';
+import { clear, getItems } from '../../slices/products.slice';
+import { remember, getState } from '../../slices/search.slice';
+import { IItem } from '../../interfaces/Item.interface';
 
 const Header = () => {
-   const [active, setActive] = useState(false);
+   const [active, setActive] = useState<boolean>(false);
    const cart = useSelector((s: TypeRootState) => s.cart.items); // корзина товаров
+   const search = useSelector((s: TypeRootState) => s.search);
+   const dispatch = useDispatch<TypeDispatch>();
    const navigate = useNavigate();
 
    const handlerToggleSearch = () => setActive(!active);
+
+   const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+      dispatch(remember(target.value));
+   };
+
+   const handleFormSubmit = (e: FormEvent) => {
+      e.preventDefault();
+
+      (async () => {
+         try {
+            const { data } = await axios.get<Array<IItem>>(`${API}/items?q=${search.search}`);
+            dispatch(clear());
+            dispatch(getItems(data));
+         } catch (error) {
+            console.log(error);
+         }
+      })();
+
+      navigate('/catalog');
+      handlerToggleSearch();
+      dispatch(getState());
+   };
 
    return (
       <header className='container'>
@@ -16,7 +45,7 @@ const Header = () => {
             <div className='col'>
                <nav className='navbar navbar-expand-sm navbar-light bg-light'>
                   <NavLink to='/' className='navbar-brand'>
-                     <img src='/public/header-logo.png' alt='bosa-noga-logo' />
+                     <img src='/header-logo.png' alt='bosa-noga-logo' />
                   </NavLink>
                   <div className='collapse navbar-collapse' id='navbarMain'>
                      <ul className='navbar-nav mr-auto'>
@@ -85,8 +114,13 @@ const Header = () => {
                            className={`header-controls-search-form form-inline ${
                               active ? 'visible' : 'invisible'
                            }`}
+                           onSubmit={handleFormSubmit}
                         >
-                           <input className='form-control' placeholder='Поиск' />
+                           <input
+                              className='form-control'
+                              onChange={handleInputChange}
+                              placeholder='Поиск'
+                           />
                         </form>
                      </div>
                   </div>

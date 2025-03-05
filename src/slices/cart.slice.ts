@@ -21,6 +21,7 @@ const cartSlice = createSlice({
             state.items.push({ ...payload, count: 1 });
             return;
          }
+
          // если существует - находим и добавляем единицу
          state.items.map((i) => {
             if (i.count! < 10) {
