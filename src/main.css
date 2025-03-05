@@ -44,8 +44,8 @@ section {
    right: 0;
 }
 .header-controls-pic {
-   height: 32px;
-   width: 32px;
+   height: 35px;
+   width: 35px;
    margin: 0 10px;
    background-image: url(../public/header-controls-sprite.png);
    background-repeat: no-repeat;
@@ -54,7 +54,7 @@ section {
 .header-controls-search {
    position: relative;
    z-index: 1;
-   background-position: -64px 0;
+   background-position: -65px 0;
 }
 .header-controls-profile {
    position: relative;
