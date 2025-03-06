@@ -4,12 +4,12 @@ import { NavLink, useNavigate } from 'react-router';
 import axios from 'axios';
 import { TypeDispatch, TypeRootState } from '../../store/store';
 import { API } from '../../helpers/API';
-import { clear, getItems } from '../../slices/products.slice';
-import { remember, getState } from '../../slices/search.slice';
+import { productActions } from '../../slices/products.slice';
+import { searchActions } from '../../slices/search.slice';
 import { IItem } from '../../interfaces/Item.interface';
 
 const Header = () => {
-   const [active, setActive] = useState<boolean>(false);
+   const [active, setActive] = useState<boolean>(false); // состояние виджета поиска
    const cart = useSelector((s: TypeRootState) => s.cart.items); // корзина товаров
    const search = useSelector((s: TypeRootState) => s.search);
    const dispatch = useDispatch<TypeDispatch>();
@@ -18,25 +18,26 @@ const Header = () => {
    const handlerToggleSearch = () => setActive(!active);
 
    const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-      dispatch(remember(target.value));
+      dispatch(searchActions.remember(target.value));
    };
 
    const handleFormSubmit = (e: FormEvent) => {
       e.preventDefault();
 
+      navigate('/catalog');
+
       (async () => {
          try {
             const { data } = await axios.get<Array<IItem>>(`${API}/items?q=${search.search}`);
-            dispatch(clear());
-            dispatch(getItems(data));
+            dispatch(productActions.clear());
+            dispatch(productActions.getItems(data));
          } catch (error) {
             console.log(error);
          }
       })();
 
-      navigate('/catalog');
       handlerToggleSearch();
-      dispatch(getState());
+      dispatch(searchActions.getState());
    };
 
    return (

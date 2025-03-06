@@ -1,10 +1,11 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { Link } from 'react-router';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TypeDispatch, TypeRootState } from '../../store/store';
-import { deleteItem } from '../../slices/cart.slice';
+import { Link } from 'react-router';
 import axios from 'axios';
 import { API } from '../../helpers/API';
+import { TypeDispatch, TypeRootState } from '../../store/store';
+import { cartActions } from '../../slices/cart.slice';
+import './Cart.css';
 
 interface IFormData {
    phone: string;
@@ -12,19 +13,19 @@ interface IFormData {
    checkbox: false;
 }
 
-interface IOrder {
-   owner: {
-      phone: string;
-      address: string;
-   };
-   items: [
-      {
-         id: number;
-         price: number;
-         count: number;
-      }
-   ];
-}
+// interface IOrder {
+//    owner: {
+//       phone: string;
+//       address: string;
+//    };
+//    items: [
+//       {
+//          id: number;
+//          price: number;
+//          count: number;
+//       }
+//    ];
+// }
 
 const Cart = () => {
    const [formData, setFormData] = useState<IFormData>({
@@ -54,33 +55,37 @@ const Cart = () => {
       });
    };
 
+   function createOrder() {
+      return cart.map((c) => {
+         return {
+            owner: {
+               phone: formData.phone,
+               address: formData.address,
+            },
+            items: [
+               {
+                  id: c.id,
+                  price: c.price,
+                  count: c.count,
+               },
+            ],
+         };
+      });
+   }
+
    const handleFormSubmit = (e: FormEvent) => {
       e.preventDefault();
 
-      const order: IOrder = {
-         owner: {
-            phone: formData.phone,
-            address: formData.address,
-         },
-
-         items: [
-            {
-               id: 1,
-               price: 233123,
-               count: 1,
-            },
-         ],
-      };
-
       (async () => {
          try {
-            const { data } = await axios.post<Array<IFormData>>(`${API}/order`, {
+            const { data } = await axios.post<IFormData>(`${API}/order`, {
                headers: {
                   'Content-Type': 'application/json',
                },
-               // body: JSON.stringify()
+               body: JSON.stringify(createOrder()),
             });
-            return data;
+            console.log(data);
+            // return data;
          } catch (e) {
             console.log(e);
          }
@@ -89,13 +94,13 @@ const Cart = () => {
       localStorage.clear(); // очищаем localStorage
    };
 
-   console.log(formData);
+   // console.log(formData);
+   // console.log(cart);
 
    return (
       <>
          <section className='cart'>
             <h2 className='text-center'>Корзина</h2>
-
             <table className='table table-bordered'>
                <thead>
                   <tr>
@@ -108,36 +113,36 @@ const Cart = () => {
                      <th scope='col'>Действия</th>
                   </tr>
                </thead>
-               {cart.map((c) => (
-                  <>
-                     <tbody>
-                        <tr>
-                           <td scope='row'>*</td>
-                           <td>
-                              <Link to={`/catalog/${c.id}`}>{c.title}</Link>
-                           </td>
-                           <td>{c.sizes[0].size}</td>
-                           <td>{c.count}</td>
-                           <td>{c.price}</td>
-                           <td>{c.price * c.count!} руб.</td>
-                           <td>
-                              <button
-                                 className='btn btn-outline-danger btn-sm'
-                                 onClick={() => dispatch(deleteItem(c))}
-                              >
-                                 Удалить
-                              </button>
-                           </td>
-                        </tr>
-                     </tbody>
-                  </>
-               ))}
+
+               <tbody>
+                  {cart.map((c, i) => (
+                     <tr key={c.id}>
+                        <td scope='row'>{i + 1}</td>
+                        <td>
+                           <Link to={`/catalog/${c.id}`}>{c.title}</Link>
+                        </td>
+                        <td>{c.sizes[0].size}</td>
+                        <td>{c.count}</td>
+                        <td>{c.price}</td>
+                        <td>{c.price * c.count!} руб.</td>
+                        <td>
+                           <button
+                              className='btn btn-outline-danger btn-sm'
+                              onClick={() => dispatch(cartActions.deleteItem(c))}
+                           >
+                              Удалить
+                           </button>
+                        </td>
+                     </tr>
+                  ))}
+               </tbody>
+
                <tfoot>
                   <tr>
                      <td colSpan={5} className='text-right'>
                         Общая стоимость
                      </td>
-                     <td>{cart.map((c) => c.count! * c.price)} руб.</td>
+                     <td>{cart.reduce((acc, c) => (acc += c.price * c.count!), 0)} руб.</td>
                   </tr>
                </tfoot>
             </table>
@@ -155,6 +160,7 @@ const Cart = () => {
                         value={formData.phone}
                         onChange={handleInputChange}
                         className='form-control'
+                        // required
                      />
                   </div>
                   <div className='form-group'>
@@ -166,6 +172,7 @@ const Cart = () => {
                         value={formData.address}
                         onChange={handleInputChange}
                         className='form-control'
+                        // required
                      />
                   </div>
                   <div className='form-group form-check'>
@@ -176,6 +183,7 @@ const Cart = () => {
                         checked={formData.checkbox}
                         onChange={handlerCheckboxChange}
                         className='form-check-input'
+                        // required
                      />
                      <label className='form-check-label' htmlFor='agreement'>
                         Согласен с правилами доставки

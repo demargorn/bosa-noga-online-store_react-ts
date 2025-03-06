@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { API } from '../../helpers/API';
 import { TypeDispatch, TypeRootState } from '../../store/store';
-import { getItems, clear } from '../../slices/products.slice';
+import { productActions } from '../../slices/products.slice';
+import { searchActions } from '../../slices/search.slice';
 import { IItem } from '../../interfaces/Item.interface';
-import { getState, remember } from '../../slices/search.slice';
 import Preloader from '../../components/Preloader/Preloader';
 import Item from '../../components/Item/Item';
 import Button from '../../components/Button/Button';
@@ -24,19 +24,19 @@ const Catalog = () => {
       (async () => {
          try {
             const { data } = await axios.get<Array<IItem>>(`${API}/items?q=${search.search}`);
-            dispatch(clear());
-            dispatch(getItems(data));
+            dispatch(productActions.clear());
+            dispatch(productActions.getItems(data));
          } catch (error) {
             console.log(error);
          }
       })();
 
-      dispatch(getState());
+      dispatch(searchActions.getState());
    };
 
    // контролируем input
    const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-      dispatch(remember(target.value));
+      dispatch(searchActions.remember(target.value));
    };
 
    // загрузить/показать обувь
@@ -44,8 +44,8 @@ const Catalog = () => {
       setActiveCategory(category);
       try {
          const { data } = await axios.get<Array<IItem>>(`${API}/items/${address}`);
-         dispatch(clear());
-         dispatch(getItems(data));
+         dispatch(productActions.clear());
+         dispatch(productActions.getItems(data));
       } catch (error) {
          console.log(error);
       }
@@ -74,7 +74,7 @@ const Catalog = () => {
 
       try {
          const { data } = await axios.get<Array<IItem>>(`${API}/items${url}&offset=6 `);
-         dispatch(getItems(data));
+         dispatch(productActions.getItems(data));
       } catch (e) {
          console.log(e);
       }

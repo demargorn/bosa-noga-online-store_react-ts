@@ -1,26 +1,17 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import { TypeDispatch, TypeRootState } from '../../store/store';
-import { API } from '../../helpers/API';
-import { getHits } from '../../slices/products.slice';
-import { IItem } from '../../interfaces/Item.interface';
+import { fetchHits } from '../../slices/hits.slice';
 import Preloader from '../Preloader/Preloader';
 import Item from '../Item/Item';
 
 const Hits = () => {
-   const hits = useSelector((s: TypeRootState) => s.products.hits); // элементы хитов
+   const hits = useSelector((s: TypeRootState) => s.hits.hits); // элементы хитов
    const dispatch = useDispatch<TypeDispatch>();
 
+   // загрузка хитовых товаров при загрузке страницы
    useEffect(() => {
-      (async () => {
-         try {
-            const { data } = await axios.get<IItem>(`${API}/top-sales`);
-            dispatch(getHits(data));
-         } catch (error) {
-            console.log(error);
-         }
-      })();
+      dispatch(fetchHits());
    }, []);
 
    return (
@@ -28,7 +19,7 @@ const Hits = () => {
          <h2 className='text-center'>Хиты продаж!</h2>
          {hits.length === 0 && <Preloader />}
          <div className='row'>
-            {hits.flat().map((h) => (
+            {hits.map((h) => (
                <Item key={h.id} {...h} />
             ))}
          </div>

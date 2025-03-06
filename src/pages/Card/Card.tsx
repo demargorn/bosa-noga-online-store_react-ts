@@ -1,40 +1,43 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import axios from 'axios';
 import { API } from '../../helpers/API';
 import { TypeDispatch, TypeRootState } from '../../store/store';
-import { add, remove } from '../../slices/cart.slice';
+import { itemActions } from '../../slices/item.slice';
 import { IItem } from '../../interfaces/Item.interface';
 import Preloader from '../../components/Preloader/Preloader';
 import './Card.css';
+import { cartActions } from '../../slices/cart.slice';
 
 const Card = () => {
    const { id } = useParams();
-   const item = useSelector((s: TypeRootState) => s.cart.items.find((i) => i.id === Number(id))); // продукт
+   const item = useSelector((s: TypeRootState) => s.item.items.find((i) => i.id === Number(id))); // продукт
    const [checked, setChecked] = useState<boolean>(false); // выбран ли размер
    const dispatch = useDispatch<TypeDispatch>();
-   const navigate = useNavigate();
 
    // увеличить количество
-   const handlePlusCount = () => dispatch(add(item!));
+   const handleAddCount = () => dispatch(itemActions.add(item!));
 
    // уменьшить количество
-   const handleMinusCount = () => dispatch(remove(item!));
+   const handleReduceCount = () => dispatch(itemActions.remove(item!));
+
+   // добавление товара в корзину
+   const handleAddToCart = () => {
+      dispatch(cartActions.add(item!));
+   };
 
    // загрузка информации о продукте
    useEffect(() => {
       (async () => {
          try {
             const { data } = await axios.get<IItem>(`${API}/items/${id}`);
-            dispatch(add(data));
+            dispatch(itemActions.add(data));
          } catch (error) {
             console.log(error);
          }
       })();
    }, []);
-
-   console.log(item);
 
    return item ? (
       <section className='catalog-item'>
@@ -44,7 +47,7 @@ const Card = () => {
                <img src={item.images[0]} className='img-fluid' alt={`фото-item.title`} />
             </div>
             <div className='col-7'>
-               <table className='table table-bordered' >
+               <table className='table table-bordered'>
                   <tbody>
                      <tr>
                         <td>Артикул</td>
@@ -90,11 +93,11 @@ const Card = () => {
                      <p>
                         Количество:
                         <span className='btn-group btn-group-sm pl-2'>
-                           <button className='btn btn-secondary' onClick={handleMinusCount}>
+                           <button className='btn btn-secondary' onClick={handleReduceCount}>
                               -
                            </button>
                            <span className='btn btn-outline-primary'>{item.count}</span>
-                           <button className='btn btn-secondary' onClick={handlePlusCount}>
+                           <button className='btn btn-secondary' onClick={handleAddCount}>
                               +
                            </button>
                         </span>
@@ -106,9 +109,9 @@ const Card = () => {
                   <button
                      className='btn btn-danger btn-block btn-lg'
                      disabled={!checked}
-                     onClick={() => navigate('/cart')}
+                     onClick={handleAddToCart}
                   >
-                     В корзину
+                     Добавить в корзину
                   </button>
                )}
             </div>
