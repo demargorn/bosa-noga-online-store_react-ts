@@ -14,21 +14,8 @@ import './Catalog.css';
 const Catalog = () => {
    const items = useSelector((s: TypeRootState) => s.products.items); // элементы каталога
    const search = useSelector((s: TypeRootState) => s.search); // хранилище поиска
-   const [activeCategory, setActiveCategory] = useState<string>('All');
+   const [activeCategory, setActiveCategory] = useState<string>('All'); // категория товаров
    const dispatch = useDispatch<TypeDispatch>();
-
-   // const category = () => {
-   //    switch (activeCategory) {
-   //       case 'Women':
-   //          return 13;
-   //       case 'Men':
-   //          return 12;
-   //       case 'Uni':
-   //          return 14;
-   //       case 'Children':
-   //          return 15;
-   //    }
-   //}
 
    const handleFormSubmit = (e: FormEvent) => {
       e.preventDefault();
@@ -52,16 +39,28 @@ const Catalog = () => {
       dispatch(remember(target.value));
    };
 
-   // загружаем еще шесть
+   // загрузить/показать обувь
+   const handleGetShoes = async (category: string, address: string = '?') => {
+      setActiveCategory(category);
+      try {
+         const { data } = await axios.get<Array<IItem>>(`${API}/items/${address}`);
+         dispatch(clear());
+         dispatch(getItems(data));
+      } catch (error) {
+         console.log(error);
+      }
+   };
+
+   // загружаем еще
    const handleGetMoreProducts = async () => {
       let url;
 
       switch (activeCategory) {
-         case 'Women':
-            url = '?categoryId=13';
-            break;
          case 'Men':
             url = '?categoryId=12';
+            break;
+         case 'Women':
+            url = '?categoryId=13';
             break;
          case 'Uni':
             url = '?categoryId=14';
@@ -81,66 +80,8 @@ const Catalog = () => {
       }
    };
 
-   // загрузить/показать всё
-   const handleShowAllShoes = async () => {
-      setActiveCategory('All');
-      try {
-         const { data } = await axios.get<Array<IItem>>(`${API}/items`);
-         dispatch(clear());
-         dispatch(getItems(data));
-      } catch (error) {
-         console.log(error);
-      }
-   };
-
-   // загрузить/показать женскую обувь
-   const handleShowWomenShoes = async () => {
-      setActiveCategory('Women');
-      try {
-         const { data } = await axios.get<Array<IItem>>(`${API}/items?categoryId=13`);
-         dispatch(clear());
-         dispatch(getItems(data));
-      } catch (error) {
-         console.log(error);
-      }
-   };
-
-   // загрузить/показать мужскую обувь
-   const handleShowMenShoes = async () => {
-      setActiveCategory('Men');
-      try {
-         const { data } = await axios.get<Array<IItem>>(`${API}/items?categoryId=12`);
-         dispatch(clear());
-         dispatch(getItems(data));
-      } catch (error) {
-         console.log(error);
-      }
-   };
-   // загрузить/показать обувь унисекс
-   const handleShowUniShoes = async () => {
-      setActiveCategory('Uni');
-      try {
-         const { data } = await axios.get<Array<IItem>>(`${API}/items?categoryId=14`);
-         dispatch(clear());
-         dispatch(getItems(data));
-      } catch (error) {
-         console.log(error);
-      }
-   };
-   // загрузить/показать детcкую обувь
-   const handleShowChildrenShoes = async () => {
-      setActiveCategory('Children');
-      try {
-         const { data } = await axios.get<Array<IItem>>(`${API}/items?categoryId=15`);
-         dispatch(clear());
-         dispatch(getItems(data));
-      } catch (error) {
-         console.log(error);
-      }
-   };
-
    useEffect(() => {
-      handleShowAllShoes();
+      handleGetShoes('All');
    }, []);
 
    return (
@@ -160,7 +101,7 @@ const Catalog = () => {
                <ul className='catalog-categories nav justify-content-center'>
                   <li className='nav-item'>
                      <a
-                        onClick={handleShowAllShoes}
+                        onClick={() => handleGetShoes('All')}
                         className={activeCategory === 'All' ? 'nav-link active' : 'nav-link'}
                      >
                         Все
@@ -168,7 +109,7 @@ const Catalog = () => {
                   </li>
                   <li className='nav-item'>
                      <a
-                        onClick={handleShowWomenShoes}
+                        onClick={() => handleGetShoes('Women', '?categoryId=13')}
                         className={activeCategory === 'Women' ? 'nav-link active' : 'nav-link'}
                      >
                         Женская обувь
@@ -176,7 +117,7 @@ const Catalog = () => {
                   </li>
                   <li className='nav-item'>
                      <a
-                        onClick={handleShowMenShoes}
+                        onClick={() => handleGetShoes('Men', '?categoryId=12')}
                         className={activeCategory === 'Men' ? 'nav-link active' : 'nav-link'}
                      >
                         Мужская обувь
@@ -184,7 +125,7 @@ const Catalog = () => {
                   </li>
                   <li className='nav-item'>
                      <a
-                        onClick={handleShowUniShoes}
+                        onClick={() => handleGetShoes('Uni', '?categoryId=14')}
                         className={activeCategory === 'Uni' ? 'nav-link active' : 'nav-link'}
                      >
                         Обувь унисекс
@@ -192,7 +133,7 @@ const Catalog = () => {
                   </li>
                   <li className='nav-item'>
                      <a
-                        onClick={handleShowChildrenShoes}
+                        onClick={() => handleGetShoes('Children', '?categoryId=15')}
                         className={activeCategory === 'Children' ? 'nav-link active' : 'nav-link'}
                      >
                         Детская обувь
