@@ -13,15 +13,14 @@ const cartSlice = createSlice({
    name: 'cart',
    initialState,
    reducers: {
-      // увеличиваем количество продукта в корзине
+      // увеличиваем количество продукта
       add: (state, { payload }: PayloadAction<IItem>) => {
          const existed = state.items.find((i) => i.id === payload.id);
          // если не существует - добавляем новый
          if (!existed) {
-            state.items.push({ ...payload, count: 1 });
+            state.items.push(payload);
             return;
          }
-
          // если существует - находим и добавляем единицу
          state.items.map((i) => {
             if (i.count! < 10) {
@@ -30,20 +29,7 @@ const cartSlice = createSlice({
             return i;
          });
       },
-      // уменьшаем количество продукта в корзине
-      remove: (state, { payload }: PayloadAction<IItem>) => {
-         const existed = state.items.find((i) => i.id === payload.id);
-         if (!existed) {
-            return;
-         }
 
-         state.items.map((i) => {
-            if (i.count! > 1) {
-               i.count! -= 1;
-            }
-            return i;
-         });
-      },
       // удаляем продукт из корзины
       deleteItem: (state, { payload }: PayloadAction<IItem>) => {
          state.items = state.items.filter((i) => i.id !== payload.id);
@@ -54,6 +40,7 @@ const cartSlice = createSlice({
       },
    },
 });
+const cartActions = cartSlice.actions;
 
-export const { add, remove, deleteItem } = cartSlice.actions;
+export { cartActions };
 export default cartSlice.reducer;
