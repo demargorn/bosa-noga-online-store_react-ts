@@ -11,20 +11,16 @@ import './Card.css';
 
 const Card = () => {
    const { id } = useParams();
-   const item = useSelector((s: TypeRootState) => s.cart.items[0]); // продукт
+   const item = useSelector((s: TypeRootState) => s.cart.items.find((i) => i.id === Number(id))); // продукт
    const [checked, setChecked] = useState<boolean>(false); // выбран ли размер
    const dispatch = useDispatch<TypeDispatch>();
    const navigate = useNavigate();
 
    // увеличить количество
-   const handlePlusCount = () => {
-      dispatch(add(item));
-   };
+   const handlePlusCount = () => dispatch(add(item!));
 
    // уменьшить количество
-   const handleMinusCount = () => {
-      dispatch(remove(item));
-   };
+   const handleMinusCount = () => dispatch(remove(item!));
 
    // загрузка информации о продукте
    useEffect(() => {
@@ -38,17 +34,17 @@ const Card = () => {
       })();
    }, []);
 
-   // console.log(item);
+   console.log(item);
 
    return item ? (
       <section className='catalog-item'>
-         <h2 className='text-center'>{item?.title}</h2>
+         <h2 className='text-center'>{item.title}</h2>
          <div className='row'>
             <div className='col-5'>
                <img src={item.images[0]} className='img-fluid' alt={`фото-item.title`} />
             </div>
             <div className='col-7'>
-               <table className='table table-bordered'>
+               <table className='table table-bordered' >
                   <tbody>
                      <tr>
                         <td>Артикул</td>
