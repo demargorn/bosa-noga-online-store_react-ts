@@ -11,7 +11,7 @@ const initialState: IHitsState = {
    hits: [],
 };
 
-// загрузка хитов с api
+/** загрузка хитов с api */
 const fetchHits = createAsyncThunk('hits/get', async () => {
    try {
       const { data } = await axios.get<Array<IItem>>(`${API}/top-sales`);
@@ -27,13 +27,13 @@ const hitsSlice = createSlice({
    name: 'hits',
    initialState,
    reducers: {
-      // записываем список хитов в хранилище
+      /** записываем список хитов в хранилище */
       getHits: (state, { payload }: PayloadAction<Array<IItem>>) => {
          payload.map((p) => {
             const existed = state.hits.find((i) => i.id === p.id); // ищем совпадения по id
 
             if (existed) {
-               return; // запрещаем добавление одикаковых по id элементов
+               return; /** запрещаем добавление одикаковых по id элементов */
             }
             state.hits.push(...payload);
          });

@@ -13,13 +13,13 @@ const productsSlice = createSlice({
    name: 'products',
    initialState,
    reducers: {
-      //загружаем список каталога
+      /** загружаем список каталога */
       getItems: (state, { payload }: PayloadAction<Array<IItem>>) => {
          payload.map((p) => {
-            const existed = state.items.find((i) => i.id === p.id); // ищем совпадения по id
+            const existed = state.items.find((i) => i.id === p.id); /** ищем совпадения по id */
 
             if (existed) {
-               return; // запрещаем добавление одикаковых по id элементов
+               return; /** запрещаем добавление одикаковых по id элементов */
             }
             state.items.push(...payload);
          });
