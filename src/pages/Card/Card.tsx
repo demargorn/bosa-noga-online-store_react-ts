@@ -5,29 +5,36 @@ import axios from 'axios';
 import { API } from '../../helpers/API';
 import { TypeDispatch, TypeRootState } from '../../store/store';
 import { itemActions } from '../../slices/item.slice';
+import { cartActions } from '../../slices/cart.slice';
 import { IItem } from '../../interfaces/Item.interface';
 import Preloader from '../../components/Preloader/Preloader';
 import './Card.css';
-import { cartActions } from '../../slices/cart.slice';
+
+/**
+ * карточка товара
+ */
 
 const Card = () => {
    const { id } = useParams();
    const item = useSelector((s: TypeRootState) => s.item.items.find((i) => i.id === Number(id))); // продукт
    const [checked, setChecked] = useState<boolean>(false); // выбран ли размер
+   const [clicked, setClicked] = useState<boolean>(false); // состояние нажатия кнопки
    const dispatch = useDispatch<TypeDispatch>();
 
-   // увеличить количество
+   /** увеличить количество */
    const handleAddCount = () => dispatch(itemActions.add(item!));
 
-   // уменьшить количество
+   /** уменьшить количество */
    const handleReduceCount = () => dispatch(itemActions.remove(item!));
 
-   // добавление товара в корзину
+   /** добавление товара в корзину */
    const handleAddToCart = () => {
       dispatch(cartActions.add(item!));
+      localStorage.setItem(id!.toString(), JSON.stringify(item));
+      setClicked(true);
    };
 
-   // загрузка информации о продукте
+   /** загрузка информации о продукте */
    useEffect(() => {
       (async () => {
          try {
@@ -88,7 +95,7 @@ const Card = () => {
                         </span>
                      ))}
                   </p>
-                  {/* если нет доступных размеров */}
+                  {/** если нет доступных размеров */}
                   {item.sizes && (
                      <p>
                         Количество:
@@ -104,14 +111,16 @@ const Card = () => {
                      </p>
                   )}
                </div>
-               {/* если нет доступных размеров */}
+               {/** если нет доступных размеров */}
                {item.sizes && (
                   <button
-                     className='btn btn-danger btn-block btn-lg'
+                     className={`btn ${
+                        clicked ? 'btn-success' : 'btn-danger'
+                     } btn-block btn-lg btn-add-to-cart`}
                      disabled={!checked}
                      onClick={handleAddToCart}
                   >
-                     Добавить в корзину
+                     {clicked ? '✓ Успешно добавлено' : 'Добавить в корзину'}
                   </button>
                )}
             </div>

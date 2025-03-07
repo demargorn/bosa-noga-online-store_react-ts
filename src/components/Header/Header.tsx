@@ -1,22 +1,33 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, useRef, FormEvent, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
-import axios from 'axios';
 import { TypeDispatch, TypeRootState } from '../../store/store';
-import { API } from '../../helpers/API';
-import { productActions } from '../../slices/products.slice';
 import { searchActions } from '../../slices/search.slice';
-import { IItem } from '../../interfaces/Item.interface';
+
+/**
+ * верхушка (header) страницы
+ */
 
 const Header = () => {
-   const [active, setActive] = useState<boolean>(false); // состояние виджета поиска
-   const cart = useSelector((s: TypeRootState) => s.cart.items); // корзина товаров
-   const search = useSelector((s: TypeRootState) => s.search);
+   const [active, setActive] = useState<boolean>(false); /** состояние виджета поиска */
+   const cart = useSelector((s: TypeRootState) => s.cart.items); /** корзина товаров */
+   const search = useRef<HTMLFormElement | null>(null); /** ссылка на форму поиска  */
    const dispatch = useDispatch<TypeDispatch>();
    const navigate = useNavigate();
 
-   const handlerToggleSearch = () => setActive(!active);
+   const handlerToggleSearch = () => {
+      setActive(!active);
+   };
 
+   /** обработчик закрытия виджета поиска */
+   const handleBlur = (e: React.FocusEvent<HTMLFormElement>) => {
+      const relatedTarget = e.relatedTarget as EventTarget | null;
+      if (search.current && !search.current.contains(relatedTarget as Node)) {
+         setActive(false);
+      }
+   };
+
+   /** контролируем input */
    const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
       dispatch(searchActions.remember(target.value));
    };
@@ -25,18 +36,7 @@ const Header = () => {
       e.preventDefault();
 
       navigate('/catalog');
-
-      (async () => {
-         try {
-            const { data } = await axios.get<Array<IItem>>(`${API}/items?q=${search.search}`);
-            dispatch(productActions.clear());
-            dispatch(productActions.getItems(data));
-         } catch (error) {
-            console.log(error);
-         }
-      })();
-
-      handlerToggleSearch();
+      handlerToggleSearch(); /** изменить состояние виджета - закрыть */
       dispatch(searchActions.getState());
    };
 
@@ -115,12 +115,14 @@ const Header = () => {
                            className={`header-controls-search-form form-inline ${
                               active ? 'visible' : 'invisible'
                            }`}
+                           ref={search}
                            onSubmit={handleFormSubmit}
+                           onBlur={handleBlur}
                         >
                            <input
-                              className='form-control'
-                              onChange={handleInputChange}
                               placeholder='Поиск'
+                              onChange={handleInputChange}
+                              className='form-control'
                            />
                         </form>
                      </div>

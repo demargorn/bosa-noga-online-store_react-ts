@@ -11,35 +11,42 @@ import Item from '../../components/Item/Item';
 import Button from '../../components/Button/Button';
 import './Catalog.css';
 
+/**
+ * страница Каталог
+ */
+
 const Catalog = () => {
-   const items = useSelector((s: TypeRootState) => s.products.items); // элементы каталога
-   const search = useSelector((s: TypeRootState) => s.search); // хранилище поиска
-   const [activeCategory, setActiveCategory] = useState<string>('All'); // категория товаров
+   const items = useSelector((s: TypeRootState) => s.products.items); /**  элементы каталога */
+   const searchPhrase = useSelector(
+      (s: TypeRootState) => s.search.search
+   ); /**  хранилище поисковой фразы */
+   const [activeCategory, setActiveCategory] = useState<string>('All'); /**  категория товаров */
    const dispatch = useDispatch<TypeDispatch>();
+
+   /** главная поисковая функция */
+   const handleSearchItems = async () => {
+      try {
+         const { data } = await axios.get<Array<IItem>>(`${API}/items?q=${searchPhrase}`);
+         dispatch(productActions.clear());
+         dispatch(productActions.getItems(data));
+      } catch (error) {
+         console.log(error);
+      }
+   };
 
    const handleFormSubmit = (e: FormEvent) => {
       e.preventDefault();
 
-      // отправляем запрос с поисковой фразой
-      (async () => {
-         try {
-            const { data } = await axios.get<Array<IItem>>(`${API}/items?q=${search.search}`);
-            dispatch(productActions.clear());
-            dispatch(productActions.getItems(data));
-         } catch (error) {
-            console.log(error);
-         }
-      })();
-
+      handleSearchItems();
       dispatch(searchActions.getState());
    };
 
-   // контролируем input
+   /** контролируем input */
    const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
       dispatch(searchActions.remember(target.value));
    };
 
-   // загрузить/показать обувь
+   /** загрузить/показать продукты */
    const handleGetShoes = async (category: string, address: string = '?') => {
       setActiveCategory(category);
       try {
@@ -51,7 +58,38 @@ const Catalog = () => {
       }
    };
 
-   // загружаем еще
+   const handleGetSearchProducts = async () => {
+      let id;
+
+      switch (activeCategory) {
+         case 'Men':
+            id = 12;
+            break;
+         case 'Women':
+            id = 13;
+            break;
+         case 'Uni':
+            id = 14;
+            break;
+         case 'Children':
+            id = 15;
+            break;
+         default:
+            id = 0;
+      }
+
+      try {
+         const { data } = await axios.get<Array<IItem>>(
+            `${API}/items?q=${searchPhrase}&offset=6&categoryId=${id}`
+         );
+         console.log(data);
+         dispatch(productActions.getItems(data));
+      } catch (e) {
+         console.log(e);
+      }
+   };
+
+   /** загружаем еще */
    const handleGetMoreProducts = async () => {
       let url;
 
@@ -81,7 +119,11 @@ const Catalog = () => {
    };
 
    useEffect(() => {
-      handleGetShoes('All');
+      if (searchPhrase) {
+         handleSearchItems();
+      } else {
+         handleGetShoes('All');
+      }
    }, []);
 
    return (
@@ -93,7 +135,7 @@ const Catalog = () => {
                <form className='catalog-search-form form-inline' onSubmit={handleFormSubmit}>
                   <input
                      className='form-control'
-                     value={search.search}
+                     value={searchPhrase}
                      onChange={handleInputChange}
                      placeholder='Поиск'
                   />
@@ -148,7 +190,11 @@ const Catalog = () => {
                {!items.length && <Preloader />}
                {items.length > 5 && (
                   <div className='text-center'>
-                     <Button onClick={handleGetMoreProducts}>Загрузить ещё</Button>
+                     <Button
+                        onClick={searchPhrase ? handleGetSearchProducts : handleGetMoreProducts}
+                     >
+                        Загрузить ещё
+                     </Button>
                   </div>
                )}
             </>

@@ -5,11 +5,15 @@ import { fetchHits } from '../../slices/hits.slice';
 import Preloader from '../Preloader/Preloader';
 import Item from '../Item/Item';
 
+/**
+ * раздел "Хиты продаж"
+ */
+
 const Hits = () => {
-   const hits = useSelector((s: TypeRootState) => s.hits.hits); // элементы хитов
+   const hits = useSelector((s: TypeRootState) => s.hits.hits); /** элементы хитов */
    const dispatch = useDispatch<TypeDispatch>();
 
-   // загрузка хитовых товаров при загрузке страницы
+   /** загрузка хитовых товаров при загрузке страницы */
    useEffect(() => {
       dispatch(fetchHits());
    }, []);

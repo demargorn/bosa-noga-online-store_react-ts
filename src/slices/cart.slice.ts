@@ -13,33 +13,39 @@ const cartSlice = createSlice({
    name: 'cart',
    initialState,
    reducers: {
-      // увеличиваем количество продукта
+      /** добавляем или увеличиваем количество продукта */
       add: (state, { payload }: PayloadAction<IItem>) => {
          const existed = state.items.find((i) => i.id === payload.id);
-         // если не существует - добавляем новый
+         /** если не существует - добавляем новый */
          if (!existed) {
             state.items.push(payload);
             return;
          }
-         // если существует - находим и добавляем единицу
+         /** если существует - находим и добавляем единицу */
          state.items.map((i) => {
             if (i.count! < 10) {
                i.count! += 1;
             }
             return i;
          });
+
+         localStorage.setItem(payload.title, JSON.stringify(payload));
       },
 
-      // удаляем продукт из корзины
+      /** удаляем продукт из корзины */
       deleteItem: (state, { payload }: PayloadAction<IItem>) => {
          state.items = state.items.filter((i) => i.id !== payload.id);
+         localStorage.removeItem(payload.title);
       },
-      // очищаем корзину
+
+      /** очищаем корзину */
       clean: (state) => {
          state.items = [];
+         localStorage.clear();
       },
    },
 });
+
 const cartActions = cartSlice.actions;
 
 export { cartActions };

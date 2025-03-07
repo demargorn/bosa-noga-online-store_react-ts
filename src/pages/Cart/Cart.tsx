@@ -5,6 +5,7 @@ import axios from 'axios';
 import { API } from '../../helpers/API';
 import { TypeDispatch, TypeRootState } from '../../store/store';
 import { cartActions } from '../../slices/cart.slice';
+import { IItem } from '../../interfaces/Item.interface';
 import './Cart.css';
 
 interface IFormData {
@@ -27,6 +28,10 @@ interface IFormData {
 //    ];
 // }
 
+/**
+ * корзина товаров
+ */
+
 const Cart = () => {
    const [formData, setFormData] = useState<IFormData>({
       phone: '',
@@ -34,9 +39,10 @@ const Cart = () => {
       checkbox: false,
    });
 
-   const cart = useSelector((s: TypeRootState) => s.cart.items); // корзина
+   const cart = useSelector((s: TypeRootState) => s.cart.items); /** корзина */
    const dispatch = useDispatch<TypeDispatch>();
 
+   /** контроль input */
    const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = target;
 
@@ -46,6 +52,13 @@ const Cart = () => {
       });
    };
 
+   /** удалить товар из корзины */
+   const handleDeleteItem = (item: IItem) => {
+      dispatch(cartActions.deleteItem(item));
+      localStorage.removeItem(item.id.toString());
+   };
+
+   /** контроль checkbox */
    const handlerCheckboxChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
       const { name, checked } = target;
 
@@ -55,6 +68,7 @@ const Cart = () => {
       });
    };
 
+   /** функция создания заказа */
    function createOrder() {
       return cart.map((c) => {
          return {
@@ -73,6 +87,7 @@ const Cart = () => {
       });
    }
 
+   /** отправка формы */
    const handleFormSubmit = (e: FormEvent) => {
       e.preventDefault();
 
@@ -85,17 +100,12 @@ const Cart = () => {
                body: JSON.stringify(createOrder()),
             });
             console.log(data);
-            // return data;
+            return data;
          } catch (e) {
             console.log(e);
          }
       })();
-
-      localStorage.clear(); // очищаем localStorage
    };
-
-   // console.log(formData);
-   // console.log(cart);
 
    return (
       <>
@@ -128,7 +138,7 @@ const Cart = () => {
                         <td>
                            <button
                               className='btn btn-outline-danger btn-sm'
-                              onClick={() => dispatch(cartActions.deleteItem(c))}
+                              onClick={() => handleDeleteItem(c)}
                            >
                               Удалить
                            </button>

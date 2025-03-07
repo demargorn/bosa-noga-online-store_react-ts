@@ -1,3 +1,7 @@
 .btn-group {
    margin-left: 5px;
 }
+
+.btn-add-to-cart {
+   transition: background-color 0.5s;
+}
