@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IItem } from '../interfaces/Item.interface';
 
+/**
+ *  срез загружаемых элементов
+ */
+
 interface IProductState {
    items: Array<IItem>;
 }
@@ -24,6 +28,7 @@ const productsSlice = createSlice({
             state.items.push(...payload);
          });
       },
+      /** очищаем список */
       clear: (state) => {
          state.items = [];
       },

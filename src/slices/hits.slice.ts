@@ -3,6 +3,10 @@ import axios, { AxiosError } from 'axios';
 import { API } from '../helpers/API';
 import { IItem } from '../interfaces/Item.interface';
 
+/**
+ *  срез хитовых предложения
+ */
+
 interface IHitsState {
    hits: Array<IItem>;
 }

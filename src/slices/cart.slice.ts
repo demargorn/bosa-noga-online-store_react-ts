@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IItem } from '../interfaces/Item.interface';
 
+/**
+ *  срез корзины товаров
+ */
+
 interface ICartState {
    items: Array<IItem>;
 }
@@ -28,14 +32,12 @@ const cartSlice = createSlice({
             }
             return i;
          });
-
-         localStorage.setItem(payload.title, JSON.stringify(payload));
       },
 
       /** удаляем продукт из корзины */
       deleteItem: (state, { payload }: PayloadAction<IItem>) => {
          state.items = state.items.filter((i) => i.id !== payload.id);
-         localStorage.removeItem(payload.title);
+         localStorage.removeItem(payload.id.toString());
       },
 
       /** очищаем корзину */

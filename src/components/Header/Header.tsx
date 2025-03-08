@@ -5,7 +5,7 @@ import { TypeDispatch, TypeRootState } from '../../store/store';
 import { searchActions } from '../../slices/search.slice';
 
 /**
- * верхушка (header) страницы
+ * компонент верхушка (header) страницы
  */
 
 const Header = () => {
@@ -104,8 +104,10 @@ const Header = () => {
                               title='корзина'
                               onClick={() => navigate('/cart')}
                            >
-                              {cart.length > 0 && (
-                                 <div className='header-controls-cart-full'>{cart.length}</div>
+                              {localStorage.length > 0 && (
+                                 <div className='header-controls-cart-full'>
+                                    {localStorage.length}
+                                 </div>
                               )}
                               <div className='header-controls-cart-menu'></div>
                            </div>

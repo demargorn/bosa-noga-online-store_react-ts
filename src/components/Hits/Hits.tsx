@@ -6,7 +6,7 @@ import Preloader from '../Preloader/Preloader';
 import Item from '../Item/Item';
 
 /**
- * раздел "Хиты продаж"
+ * компонент "Хиты продаж"
  */
 
 const Hits = () => {

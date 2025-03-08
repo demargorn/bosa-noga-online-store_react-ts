@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IItem } from '../interfaces/Item.interface';
 
+/**
+ * срез карточки товара
+ */
+
 interface IItemState {
    items: Array<IItem>;
 }
@@ -13,24 +17,27 @@ const itemSlice = createSlice({
    name: 'item',
    initialState,
    reducers: {
-      // увеличиваем количество продукта
+      /** увеличиваем количество продукта */
       add: (state, { payload }: PayloadAction<IItem>) => {
          const existed = state.items.find((i) => i.id === payload.id);
-         // если не существует - добавляем новый
+         /** если не существует - добавляем новый */
          if (!existed) {
             state.items.push({ ...payload, count: 1 });
             return;
          }
 
-         // если существует - находим и добавляем единицу
+         /** если существует - находим и добавляем единицу */
          state.items.map((i) => {
             if (i.count! < 10) {
                i.count! += 1;
             }
             return i;
          });
+
+         localStorage.setItem(payload.id.toString(), JSON.stringify(payload));
       },
-      // уменьшаем количество продукта
+
+      /** уменьшаем количество продукта */
       remove: (state, { payload }: PayloadAction<IItem>) => {
          const existed = state.items.find((i) => i.id === payload.id);
          if (!existed) {
