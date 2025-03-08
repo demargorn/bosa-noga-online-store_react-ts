@@ -37,7 +37,6 @@ const Catalog = () => {
       e.preventDefault();
 
       handleSearchItems();
-      dispatch(searchActions.getState());
    };
 
    /** контролируем input */

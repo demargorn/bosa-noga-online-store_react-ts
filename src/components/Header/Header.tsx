@@ -37,7 +37,6 @@ const Header = () => {
 
       navigate('/catalog');
       handlerToggleSearch(); /** изменить состояние виджета - закрыть */
-      dispatch(searchActions.getState());
    };
 
    return (
