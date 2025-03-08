@@ -2,3 +2,21 @@
    max-width: 30rem;
    margin: 0 auto;
 }
+
+.cart-empty {
+   display: flex;
+   flex-direction: column;
+}
+
+.cart-empty-title {
+   font-size: 30px;
+}
+
+.cart-empty-text {
+   font-size: 20px;
+}
+
+.btn-empty-cart {
+   margin: 20px 0px;
+   width: 200px;
+}

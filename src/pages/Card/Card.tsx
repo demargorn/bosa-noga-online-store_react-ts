@@ -16,21 +16,17 @@ import './Card.css';
 
 const Card = () => {
    const { id } = useParams();
-   const item = useSelector((s: TypeRootState) => s.item.items.find((i) => i.id === Number(id))); // продукт
-   const [checked, setChecked] = useState<boolean>(false); // выбран ли размер
-   const [clicked, setClicked] = useState<boolean>(false); // состояние нажатия кнопки
+   const item = useSelector((s: TypeRootState) =>
+      s.item.items.find((i) => i.id === Number(id))
+   ); /** ищем продукт */
+   const [checked, setChecked] = useState<boolean>(false); /** выбран ли размер */
+   const [clicked, setClicked] = useState<boolean>(false); /** состояние нажатия кнопки */
    const dispatch = useDispatch<TypeDispatch>();
-
-   /** увеличить количество */
-   const handleAddCount = () => dispatch(itemActions.add(item!));
-
-   /** уменьшить количество */
-   const handleReduceCount = () => dispatch(itemActions.remove(item!));
 
    /** добавление товара в корзину */
    const handleAddToCart = () => {
       dispatch(cartActions.add(item!));
-      localStorage.setItem(id!.toString(), JSON.stringify(item));
+      localStorage.setItem(item!.id.toString(), JSON.stringify(item));
       setClicked(true);
    };
 
@@ -100,11 +96,17 @@ const Card = () => {
                      <p>
                         Количество:
                         <span className='btn-group btn-group-sm pl-2'>
-                           <button className='btn btn-secondary' onClick={handleReduceCount}>
+                           <button
+                              className='btn btn-secondary'
+                              onClick={() => dispatch(itemActions.remove(item))}
+                           >
                               -
                            </button>
                            <span className='btn btn-outline-primary'>{item.count}</span>
-                           <button className='btn btn-secondary' onClick={handleAddCount}>
+                           <button
+                              className='btn btn-secondary'
+                              onClick={() => dispatch(itemActions.add(item))}
+                           >
                               +
                            </button>
                         </span>
@@ -120,7 +122,7 @@ const Card = () => {
                      disabled={!checked}
                      onClick={handleAddToCart}
                   >
-                     {clicked ? '✓ Успешно добавлено' : 'Добавить в корзину'}
+                     {clicked ? '✓ Добавлено в корзину' : 'Добавить в корзину'}
                   </button>
                )}
             </div>

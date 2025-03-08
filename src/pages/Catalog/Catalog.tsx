@@ -8,7 +8,6 @@ import { searchActions } from '../../slices/search.slice';
 import { IItem } from '../../interfaces/Item.interface';
 import Preloader from '../../components/Preloader/Preloader';
 import Item from '../../components/Item/Item';
-import Button from '../../components/Button/Button';
 import './Catalog.css';
 
 /**
@@ -190,11 +189,12 @@ const Catalog = () => {
                {!items.length && <Preloader />}
                {items.length > 5 && (
                   <div className='text-center'>
-                     <Button
+                     <button
+                        className='btn btn-outline-primary'
                         onClick={searchPhrase ? handleGetSearchProducts : handleGetMoreProducts}
                      >
                         Загрузить ещё
-                     </Button>
+                     </button>
                   </div>
                )}
             </>
