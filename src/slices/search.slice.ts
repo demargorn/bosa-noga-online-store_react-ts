@@ -20,9 +20,6 @@ const searchSlice = createSlice({
       remember: (state, { payload }: PayloadAction<string>) => {
          state.search = payload;
       },
-
-      /** передаем стэйт */
-      getState: (state) => state,
    },
 });
 
