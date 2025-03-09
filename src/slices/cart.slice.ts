@@ -25,6 +25,7 @@ const cartSlice = createSlice({
             state.items.push(payload);
             return;
          }
+
          /** если существует - находим и добавляем единицу */
          state.items.map((i) => {
             if (i.count! < 10) {
@@ -32,6 +33,8 @@ const cartSlice = createSlice({
             }
             return i;
          });
+
+         /** добавляем в local storage по кнопке в карточке товара, тк отсюда почему-то срабатывает только по двойному нажатию на кнопку "Добавить в корзину"*/
       },
 
       /** удаляем продукт из корзины */

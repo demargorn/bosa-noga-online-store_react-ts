@@ -25,9 +25,11 @@ const Card = () => {
 
    /** добавление товара в корзину */
    const handleAddToCart = () => {
-      dispatch(cartActions.add(item!));
-      localStorage.setItem(item!.id.toString(), JSON.stringify(item));
       setClicked(true);
+      dispatch(cartActions.add(item!));
+
+      /**добавляем в local storage */
+      localStorage.setItem(item!.id.toString(), JSON.stringify(item));
    };
 
    /** загрузка информации о продукте */

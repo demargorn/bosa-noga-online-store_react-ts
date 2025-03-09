@@ -168,7 +168,7 @@ const Cart = () => {
                            </td>
                            <td>{a.sizes[0].size}</td>
                            <td>{a.count}</td>
-                           <td>{a.price}</td>
+                           <td>{a.price} руб.</td>
                            <td>{a.price * a.count!} руб.</td>
                            <td>
                               <button
@@ -195,7 +195,6 @@ const Cart = () => {
          )}
 
          {data && <OrderSuccess />}
-
          {arr.length > 0 && (
             <section className='order'>
                <h2 className='text-center'>Оформить заказ</h2>

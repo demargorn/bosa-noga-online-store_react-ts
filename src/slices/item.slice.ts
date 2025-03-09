@@ -28,13 +28,11 @@ const itemSlice = createSlice({
 
          /** если существует - находим и добавляем единицу */
          state.items.map((i) => {
-            if (i.count! < 10) {
+            if (!i.count || i.count! < 10) {
                i.count! += 1;
             }
             return i;
          });
-
-         localStorage.setItem(payload.id.toString(), JSON.stringify(payload));
       },
 
       /** уменьшаем количество продукта */
