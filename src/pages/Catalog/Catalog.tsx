@@ -20,14 +20,17 @@ const Catalog = () => {
       (s: TypeRootState) => s.search.search
    ); /**  хранилище поисковой фразы */
    const [activeCategory, setActiveCategory] = useState<string>('All'); /**  категория товаров */
+   const [loading, setLoading] = useState<boolean>(false); /** состояние загрузки */
    const dispatch = useDispatch<TypeDispatch>();
 
    /** главная поисковая функция */
    const handleSearchItems = async () => {
+      setLoading(true);
       try {
          const { data } = await axios.get<Array<IItem>>(`${API}/items?q=${searchPhrase}`);
          dispatch(productActions.clear());
          dispatch(productActions.getItems(data));
+         setLoading(false);
       } catch (error) {
          console.log(error);
       }
@@ -47,16 +50,19 @@ const Catalog = () => {
    /** загрузить/показать продукты */
    const handleGetShoes = async (category: string, address: string = '?') => {
       setActiveCategory(category);
+      setLoading(true);
       try {
          const { data } = await axios.get<Array<IItem>>(`${API}/items/${address}`);
          dispatch(productActions.clear());
          dispatch(productActions.getItems(data));
+         setLoading(false);
       } catch (error) {
          console.log(error);
       }
    };
 
    const handleGetSearchProducts = async () => {
+      setLoading(true);
       let id;
 
       switch (activeCategory) {
@@ -80,8 +86,8 @@ const Catalog = () => {
          const { data } = await axios.get<Array<IItem>>(
             `${API}/items?q=${searchPhrase}&offset=6&categoryId=${id}`
          );
-         console.log(data);
          dispatch(productActions.getItems(data));
+         setLoading(false);
       } catch (e) {
          console.log(e);
       }
@@ -89,6 +95,7 @@ const Catalog = () => {
 
    /** загружаем еще */
    const handleGetMoreProducts = async () => {
+      setLoading(true);
       let url;
 
       switch (activeCategory) {
@@ -111,6 +118,7 @@ const Catalog = () => {
       try {
          const { data } = await axios.get<Array<IItem>>(`${API}/items${url}&offset=6 `);
          dispatch(productActions.getItems(data));
+         setLoading(false);
       } catch (e) {
          console.log(e);
       }
@@ -127,17 +135,22 @@ const Catalog = () => {
    return (
       <section className='catalog'>
          <h2 className='text-center'>Каталог</h2>
-         {!items.length && <Preloader />}
+
+         {loading && <Preloader />}
+
+         <form className='catalog-search-form form-inline' onSubmit={handleFormSubmit}>
+            <input
+               className='form-control'
+               value={searchPhrase}
+               onChange={handleInputChange}
+               placeholder='Поиск'
+            />
+         </form>
+
+         {!items.length && <span className='empty-search'>Поиск не дал результатов</span>}
+
          {items.length > 0 && (
             <>
-               <form className='catalog-search-form form-inline' onSubmit={handleFormSubmit}>
-                  <input
-                     className='form-control'
-                     value={searchPhrase}
-                     onChange={handleInputChange}
-                     placeholder='Поиск'
-                  />
-               </form>
                <ul className='catalog-categories nav justify-content-center'>
                   <li className='nav-item'>
                      <a

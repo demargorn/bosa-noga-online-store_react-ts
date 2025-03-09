@@ -1,3 +1,7 @@
 .nav-link:hover {
    color: #ff0000;
 }
+
+.empty-search {
+   font-size: 24px;
+}
