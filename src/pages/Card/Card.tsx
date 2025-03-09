@@ -42,7 +42,7 @@ const Card = () => {
             console.log(error);
          }
       })();
-   }, []);
+   }, [id]);
 
    return item ? (
       <section className='catalog-item'>

@@ -6,6 +6,7 @@ import { API } from '../../helpers/API';
 import { TypeDispatch, TypeRootState } from '../../store/store';
 import { cartActions } from '../../slices/cart.slice';
 import { IItem } from '../../interfaces/Item.interface';
+import sha256 from 'crypto-js/sha256';
 import OrderSuccess from '../../components/OrderSuccess/OrderSuccess';
 import './Cart.css';
 
@@ -43,7 +44,9 @@ const Cart = () => {
       address: '',
       checkbox: false,
    });
-   const cart = useSelector((s: TypeRootState) => s.cart.items); /** корзина товаров */
+   const cart = useSelector(
+      (s: TypeRootState) => s.cart.items
+   ); /** корзина товаров тут для работы cartActions */
    const [data, setData] = useState<AxiosResponse<string>>(); /** состояние ответа от сервера */
    const dispatch = useDispatch<TypeDispatch>();
    const navigate = useNavigate();
@@ -80,8 +83,8 @@ const Cart = () => {
    /** функция создания заказа */
    function createOrder(): IOrder {
       const owner = {
-         phone: formData.phone,
-         address: formData.address,
+         phone: sha256(formData.phone).toString() /** шифруем телефон */,
+         address: sha256(formData.address).toString() /** шифруем адрес */,
       };
       const products = arr.map((a) => [
          {
@@ -124,6 +127,8 @@ const Cart = () => {
       /** очищаем корзину и local store */
       dispatch(cartActions.clean());
    };
+
+   console.log(data);
 
    return (
       <>
@@ -187,7 +192,7 @@ const Cart = () => {
                         <td colSpan={5} className='text-right'>
                            Общая стоимость
                         </td>
-                        <td>{cart.reduce((acc, c) => (acc += c.price * c.count!), 0)} руб.</td>
+                        <td>{arr.reduce((acc, c) => (acc += c.price * c.count!), 0)} руб.</td>
                      </tr>
                   </tfoot>
                </table>
