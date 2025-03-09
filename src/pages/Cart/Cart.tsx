@@ -128,8 +128,6 @@ const Cart = () => {
       dispatch(cartActions.clean());
    };
 
-   console.log(data);
-
    return (
       <>
          <h2 className='text-center'>Корзина</h2>
