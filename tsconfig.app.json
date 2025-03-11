@@ -10,15 +10,7 @@
       /* paths*/
       "baseUrl": ".",
       "paths": {
-         "@/*": ["src/*"],
-         "@backend/*": ["backend/*"],
-         "@components/*": ["components/*"],
-         "@helpers/*": ["src/helpers/*"],
-         "@layouts/*": ["layouts/*"],
-         "@pages/*": ["pages/*"],
-         "@router/*": ["router/*"],
-         "@slices/*": ["slices/*"],
-         "@store/*": ["store/*"]
+         "@/*": ["src/*"]
       },
 
       /* Bundler mode */
