@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TypeDispatch, TypeRootState } from '../../store/store';
-import { fetchHits } from '../../slices/hits.slice';
-import Preloader from '../Preloader/Preloader';
-import Item from '../Item/Item';
+import { TypeDispatch, TypeRootState } from '@/store/store';
+import { fetchHits } from '@/slices/hits.slice';
+import Preloader from '@/components/Preloader/Preloader';
+import Item from '@/components/Item/Item';
 
 /**
  * компонент "Хиты продаж"

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IItem } from '../interfaces/Item.interface';
+import { IItem } from '@/interfaces/Item.interface';
 
 /**
  *  срез загружаемых элементов

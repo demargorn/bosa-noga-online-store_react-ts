@@ -1,8 +1,8 @@
 import { useState, useRef, FormEvent, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router';
-import { TypeDispatch, TypeRootState } from '../../store/store';
-import { searchActions } from '../../slices/search.slice';
+import { TypeDispatch, TypeRootState } from '@/store/store';
+import { searchActions } from '@/slices/search.slice';
 
 /**
  * компонент верхушка (header) страницы

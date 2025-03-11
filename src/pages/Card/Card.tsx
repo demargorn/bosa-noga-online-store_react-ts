@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import axios from 'axios';
-import { API } from '../../helpers/API';
-import { TypeDispatch, TypeRootState } from '../../store/store';
-import { itemActions } from '../../slices/item.slice';
-import { cartActions } from '../../slices/cart.slice';
-import { IItem } from '../../interfaces/Item.interface';
-import Preloader from '../../components/Preloader/Preloader';
+import { API } from '@/helpers/API';
+import { TypeDispatch, TypeRootState } from '@/store/store';
+import { itemActions } from '@/slices/item.slice';
+import { cartActions } from '@/slices/cart.slice';
+import { IItem } from '@/interfaces/Item.interface';
+import Preloader from '@/components/Preloader/Preloader';
 import './Card.css';
 
 /**

@@ -1,13 +1,13 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { API } from '../../helpers/API';
-import { TypeDispatch, TypeRootState } from '../../store/store';
-import { productActions } from '../../slices/products.slice';
-import { searchActions } from '../../slices/search.slice';
-import { IItem } from '../../interfaces/Item.interface';
-import Preloader from '../../components/Preloader/Preloader';
-import Item from '../../components/Item/Item';
+import { API } from '@/helpers/API';
+import { TypeDispatch, TypeRootState } from '@/store/store';
+import { productActions } from '@/slices/products.slice';
+import { searchActions } from '@/slices/search.slice';
+import { IItem } from '@/interfaces/Item.interface';
+import Preloader from '@/components/Preloader/Preloader';
+import Item from '@/components/Item/Item';
 import './Catalog.css';
 
 /**

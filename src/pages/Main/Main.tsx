@@ -1,5 +1,5 @@
-import Hits from '../../components/Hits/Hits';
-import Catalog from '../Catalog/Catalog';
+import Hits from '@/components/Hits/Hits';
+import Catalog from '@/pages/Catalog/Catalog';
 
 /**
  *  главная страница

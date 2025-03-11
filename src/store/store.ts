@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import searchReducer from '../slices/search.slice';
-import hitsReducer from '../slices/hits.slice';
-import productsReducer from '../slices/products.slice';
-import itemReducer from '../slices/item.slice';
-import cartReducer from '../slices/cart.slice';
+import searchReducer from '@/slices/search.slice';
+import hitsReducer from '@/slices/hits.slice';
+import productsReducer from '@/slices/products.slice';
+import itemReducer from '@/slices/item.slice';
+import cartReducer from '@/slices/cart.slice';
 
 const store = configureStore({
    reducer: {

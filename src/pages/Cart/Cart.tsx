@@ -2,12 +2,12 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
-import { API } from '../../helpers/API';
-import { TypeDispatch, TypeRootState } from '../../store/store';
-import { cartActions } from '../../slices/cart.slice';
-import { IItem } from '../../interfaces/Item.interface';
 import sha256 from 'crypto-js/sha256';
-import OrderSuccess from '../../components/OrderSuccess/OrderSuccess';
+import { API } from '@/helpers/API';
+import { TypeDispatch, TypeRootState } from '@/store/store';
+import { cartActions } from '@/slices/cart.slice';
+import { IItem } from '@/interfaces/Item.interface';
+import OrderSuccess from '@/components/OrderSuccess/OrderSuccess';
 import './Cart.css';
 
 /**
@@ -232,16 +232,18 @@ const Cart = () => {
                            id='agreement'
                            type='checkbox'
                            name='checkbox'
-                           checked={formData.checkbox}
                            onChange={handlerCheckboxChange}
                            className='form-check-input'
-                           required
                         />
                         <label className='form-check-label' htmlFor='agreement'>
                            Согласен с правилами доставки
                         </label>
                      </div>
-                     <button type='submit' className='btn btn-outline-secondary'>
+                     <button
+                        type='submit'
+                        className='btn btn-outline-secondary'
+                        disabled={!formData.checkbox}
+                     >
                         Оформить
                      </button>
                   </form>

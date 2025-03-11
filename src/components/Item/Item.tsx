@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { IItem } from '../../interfaces/Item.interface';
+import { IItem } from '@/interfaces/Item.interface';
 import './Item.css';
 
 /**
