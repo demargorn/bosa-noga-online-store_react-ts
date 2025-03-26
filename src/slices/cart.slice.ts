@@ -19,7 +19,7 @@ const cartSlice = createSlice({
    reducers: {
       /** добавляем или увеличиваем количество продукта */
       add: (state, { payload }: PayloadAction<IItem>) => {
-         const existed = state.items.find((i) => i.id === payload.id);
+         const existed = state.items.some((i) => i.id === payload.id);
          /** если не существует - добавляем новый */
          if (!existed) {
             state.items.push(payload);
@@ -27,7 +27,7 @@ const cartSlice = createSlice({
          }
 
          /** если существует - находим и добавляем единицу */
-         state.items.map((i) => {
+         state.items.forEach((i) => {
             if (i.count! < 10) {
                i.count! += 1;
             }

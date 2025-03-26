@@ -34,11 +34,12 @@ const hitsSlice = createSlice({
       /** записываем список хитов в хранилище */
       getHits: (state, { payload }: PayloadAction<Array<IItem>>) => {
          payload.map((p) => {
-            const existed = state.hits.find((i) => i.id === p.id); // ищем совпадения по id
+            const existed = state.hits.some((i) => i.id === p.id); // ищем совпадения по id
 
             if (existed) {
                return; /** запрещаем добавление одикаковых по id элементов */
             }
+
             state.hits.push(...payload);
          });
       },

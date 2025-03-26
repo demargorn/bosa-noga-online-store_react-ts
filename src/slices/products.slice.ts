@@ -20,11 +20,12 @@ const productsSlice = createSlice({
       /** загружаем список каталога */
       getItems: (state, { payload }: PayloadAction<Array<IItem>>) => {
          payload.map((p) => {
-            const existed = state.items.find((i) => i.id === p.id); /** ищем совпадения по id */
+            const existed = state.items.some((i) => i.id === p.id); /** ищем совпадения по id */
 
             if (existed) {
                return; /** запрещаем добавление одикаковых по id элементов */
             }
+
             state.items.push(...payload);
          });
       },
