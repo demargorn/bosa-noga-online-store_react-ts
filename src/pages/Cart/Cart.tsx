@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router';
 import axios, { AxiosRequestConfig, AxiosResponse, RawAxiosRequestHeaders } from 'axios';
 import sha256 from 'crypto-js/sha256';
 import { API } from '@/helpers/API';
+import { localStorageToArray } from '@/helpers/localStorageFn';
 import { TypeDispatch, TypeRootState } from '@/store/store';
 import { cartActions } from '@/slices/cart.slice';
 import { IItem } from '@/interfaces/Item.interface';
@@ -51,9 +52,8 @@ const Cart = () => {
    const dispatch = useDispatch<TypeDispatch>();
    const navigate = useNavigate();
 
-   /** получаем массив из local storage */
-   const storage: Array<string> = Object.values(localStorage);
-   const arr: Array<IItem> = storage.map((s) => JSON.parse(s));
+   /** безопасно получаем массив из local storage */
+   const arr = localStorageToArray(localStorage);
 
    /** контроль input */
    const handleInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +107,7 @@ const Cart = () => {
       const config: AxiosRequestConfig<string> = {
          headers: {
             'Content-Type': 'application/json',
-         } as RawAxiosRequestHeaders,
+         } satisfies RawAxiosRequestHeaders,
       };
 
       (async () => {

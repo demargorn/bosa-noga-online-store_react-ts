@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import axios from 'axios';
 import { API } from '@/helpers/API';
+import { setLocalStorageItem } from '@/helpers/localStorageFn';
 import { TypeDispatch, TypeRootState } from '@/store/store';
 import { itemActions } from '@/slices/item.slice';
 import { cartActions } from '@/slices/cart.slice';
@@ -27,9 +28,8 @@ const Card = () => {
    const handleAddToCart = () => {
       setClicked(true);
       dispatch(cartActions.add(item!));
-
       /**добавляем в local storage */
-      localStorage.setItem(item!.id.toString(), JSON.stringify(item));
+      setLocalStorageItem(item!.id.toString(), item!);
    };
 
    /** загрузка информации о продукте */
